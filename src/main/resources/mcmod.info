@@ -1,0 +1,16 @@
+[
+{
+  "modid": "nexus",
+  "name": "Nexus",
+  "description": "A Magic: The Gathering themed mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/breakinblocks/Nexus",
+  "updateUrl": "",
+  "authorList": ["TeamDman","Saereth"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
