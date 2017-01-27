@@ -29,11 +29,12 @@ public class Nexus {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		ModItems.init();
 	}
 
 	@Mod.EventHandler
 	public void preinit (FMLPreInitializationEvent event) {
-		ModItems.init();
+
 	}
 
 	@Mod.EventHandler

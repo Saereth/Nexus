@@ -16,6 +16,7 @@ public class ModItems {
 		item.setUnlocalizedName(name);
 		item.setCreativeTab(Nexus.tab);
 		GameRegistry.register(item);
+		Nexus.proxy.tryHandleItemModel(item,name);
 		return item;
 	}
 }
