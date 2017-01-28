@@ -48,10 +48,8 @@ public class ManaConcentrationHelper {
     
     private float getNoise(long seed, int posX, int posZ) {
     	int hash = hashCode();
-    	System.out.println("Hashcode: " + hash);
     	rand.setSeed(hash);
         rand.nextLong();
-        System.out.println("Rand.nextfloat:" + rand.nextFloat());
         return rand.nextFloat();
     }
     

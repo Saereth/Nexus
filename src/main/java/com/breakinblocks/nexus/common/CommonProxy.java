@@ -21,7 +21,7 @@ public class CommonProxy {
 	}
 
 	public void init(FMLInitializationEvent event) {
-		GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 30);
+		GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 10);
 		System.out.println("Generator Called");
 	}
 
