@@ -1,8 +1,6 @@
-package com.breakinblocks.nexus.blocks;
+package com.breakinblocks.nexus.common.blocks;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 

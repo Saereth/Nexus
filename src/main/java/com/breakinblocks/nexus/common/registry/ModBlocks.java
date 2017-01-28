@@ -1,9 +1,9 @@
-package com.breakinblocks.nexus.registry;
+package com.breakinblocks.nexus.common.registry;
 
 import com.breakinblocks.nexus.Nexus;
-import com.breakinblocks.nexus.blocks.FluidBlockMana;
-import com.breakinblocks.nexus.blocks.FluidMana;
-import com.breakinblocks.nexus.handlers.TextureHandler;
+import com.breakinblocks.nexus.common.blocks.FluidBlockMana;
+import com.breakinblocks.nexus.common.blocks.FluidMana;
+import com.breakinblocks.nexus.client.TextureHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;

@@ -1,6 +1,6 @@
 package com.breakinblocks.nexus;
 
-import com.breakinblocks.nexus.proxy.CommonProxy;
+import com.breakinblocks.nexus.common.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -24,7 +24,7 @@ public class Nexus {
 		}
 	};
 
-	@SidedProxy(clientSide = "com.breakinblocks.nexus.proxy.ClientProxy", serverSide = "com.breakinblocks.nexus.proxy.CommonProxy")
+	@SidedProxy(clientSide = "com.breakinblocks.nexus.client.ClientProxy", serverSide = "com.breakinblocks.nexus.common.CommonProxy")
 	public static CommonProxy proxy;
 
 	static {

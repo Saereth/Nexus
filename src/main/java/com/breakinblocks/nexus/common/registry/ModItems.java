@@ -1,7 +1,7 @@
-package com.breakinblocks.nexus.registry;
+package com.breakinblocks.nexus.common.registry;
 
 import com.breakinblocks.nexus.Nexus;
-import com.breakinblocks.nexus.items.ItemTablet;
+import com.breakinblocks.nexus.common.items.ItemTablet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;

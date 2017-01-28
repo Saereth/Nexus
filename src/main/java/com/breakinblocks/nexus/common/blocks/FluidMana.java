@@ -1,4 +1,4 @@
-package com.breakinblocks.nexus.blocks;
+package com.breakinblocks.nexus.common.blocks;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;

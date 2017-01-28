@@ -1,6 +1,6 @@
-package com.breakinblocks.nexus.items;
+package com.breakinblocks.nexus.common.items;
 
-import com.breakinblocks.nexus.registry.ModBlocks;
+import com.breakinblocks.nexus.common.registry.ModBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

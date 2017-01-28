@@ -1,5 +1,7 @@
-package com.breakinblocks.nexus.proxy;
+package com.breakinblocks.nexus.common;
 
+import com.breakinblocks.nexus.common.registry.ModBlocks;
+import com.breakinblocks.nexus.common.registry.ModItems;
 import com.breakinblocks.nexus.common.world.NexusWorldGenerator;
 
 import net.minecraft.block.Block;
@@ -14,7 +16,8 @@ public class CommonProxy {
 	public static NexusWorldGenerator worldGenerator = new NexusWorldGenerator();
 
 	public void preInit(FMLPreInitializationEvent event) {
-
+		ModBlocks.init();
+		ModItems.init();
 	}
 
 	public void init(FMLInitializationEvent event) {

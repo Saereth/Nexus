@@ -1,7 +1,7 @@
-package com.breakinblocks.nexus.handlers;
+package com.breakinblocks.nexus.client;
 
 import com.breakinblocks.nexus.Nexus;
-import com.breakinblocks.nexus.registry.ModBlocks;
+import com.breakinblocks.nexus.common.registry.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
