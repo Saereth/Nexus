@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Nexus.MODID, name = Nexus.NAME, version = Nexus.VERSION, dependencies = Nexus.DEPENDENCIES)
+@Mod(modid = Nexus.MODID, name = Nexus.NAME, version = Nexus.VERSION, dependencies = Nexus.DEPENDENCIES, guiFactory = "com.breakinblocks.nexus.client.gui.config.ConfigGuiFactory")
 public class Nexus {
 	public static final String MODID = "nexus";
 	public static final String NAME = "Nexus";
