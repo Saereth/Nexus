@@ -1,10 +1,10 @@
 package com.breakinblocks.nexus;
 
 import com.breakinblocks.nexus.proxy.CommonProxy;
-import com.breakinblocks.nexus.registry.ModItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -24,19 +24,25 @@ public class Nexus {
 		}
 	};
 
-	@SidedProxy(clientSide = "com.breakinblocks.nexus.proxy.ClientProxy", serverSide = "com.breakinblocks.nexus.proxy.ServerProxy")
+	@SidedProxy(clientSide = "com.breakinblocks.nexus.proxy.ClientProxy", serverSide = "com.breakinblocks.nexus.proxy.CommonProxy")
 	public static CommonProxy proxy;
+
+	static {
+		FluidRegistry.enableUniversalBucket();
+	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		ModItems.init();
+		proxy.init(event);
 	}
 
 	@Mod.EventHandler
-	public void preinit (FMLPreInitializationEvent event) {
-
+	public void preinit(FMLPreInitializationEvent event) {
+		proxy.preInit(event);
 	}
 
 	@Mod.EventHandler
-	public void postinit (FMLPostInitializationEvent event) {}
+	public void postinit(FMLPostInitializationEvent event) {
+		proxy.postInit(event);
+	}
 }
