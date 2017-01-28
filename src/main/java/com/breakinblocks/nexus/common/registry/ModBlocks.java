@@ -14,6 +14,16 @@ import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks {
+	public static Fluid FLUIDMANACOLOURLESS;
+	public static FluidBlockMana BLOCKMANACOLOURLESS;
+	public static Fluid FLUIDMANAWHITE;
+	public static FluidBlockMana BLOCKMANAWHITE;
+	public static Fluid FLUIDMANABLUE;
+	public static FluidBlockMana BLOCKMANABLUE;
+	public static Fluid FLUIDMANABLACK;
+	public static FluidBlockMana BLOCKMANABLACK;
+	public static Fluid FLUIDMANARED;
+	public static FluidBlockMana BLOCKMANARED;
 	public static Fluid FLUIDMANAGREEN;
 	public static FluidBlockMana BLOCKMANAGREEN;
 
@@ -28,14 +38,62 @@ public class ModBlocks {
 	}
 
 	public static void registerFluids() {
-		FluidMana fluid = new FluidMana("managreen", TextureHandler.fluidManaGreenStill, TextureHandler.fluidManaGreenFlow);
-		FluidRegistry.registerFluid(fluid);
-		FLUIDMANAGREEN = FluidRegistry.getFluid(fluid.getName());
-		BLOCKMANAGREEN = new FluidBlockMana(fluid,new MaterialLiquid(MapColor.GRASS));
+		FluidMana fluidColourless = new FluidMana("manacolourless", TextureHandler.fluidManaColourlessStill, TextureHandler.fluidManaColourlessFlow);
+		FluidRegistry.registerFluid(fluidColourless);
+		FLUIDMANACOLOURLESS = FluidRegistry.getFluid(fluidColourless.getName());
+		BLOCKMANACOLOURLESS = new FluidBlockMana(fluidColourless,new MaterialLiquid(MapColor.GRAY));
+		GameRegistry.register(BLOCKMANACOLOURLESS);
+		FLUIDMANACOLOURLESS.setBlock(BLOCKMANACOLOURLESS);
+		FluidRegistry.addBucketForFluid(fluidColourless);
+		ModItems.BUCKETMANACOLOURLESS = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANACOLOURLESS);
+
+
+		FluidMana fluidWhite = new FluidMana("manawhite", TextureHandler.fluidManaWhiteStill, TextureHandler.fluidManaWhiteFlow);
+		FluidRegistry.registerFluid(fluidWhite);
+		FLUIDMANAWHITE = FluidRegistry.getFluid(fluidWhite.getName());
+		BLOCKMANAWHITE = new FluidBlockMana(fluidWhite,new MaterialLiquid(MapColor.SNOW));
+		GameRegistry.register(BLOCKMANAWHITE);
+		FLUIDMANAWHITE.setBlock(BLOCKMANAWHITE);
+		FluidRegistry.addBucketForFluid(fluidWhite);
+		ModItems.BUCKETMANAWHITE = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANAWHITE);
+
+		FluidMana fluidBlue = new FluidMana("manablue", TextureHandler.fluidManaBlueStill, TextureHandler.fluidManaBlueFlow);
+		FluidRegistry.registerFluid(fluidBlue);
+		FLUIDMANABLUE = FluidRegistry.getFluid(fluidBlue.getName());
+		BLOCKMANABLUE = new FluidBlockMana(fluidBlue,new MaterialLiquid(MapColor.WATER));
+		GameRegistry.register(BLOCKMANABLUE);
+		FLUIDMANABLUE.setBlock(BLOCKMANABLUE);
+		FluidRegistry.addBucketForFluid(fluidBlue);
+		ModItems.BUCKETMANABLUE = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANABLUE);
+
+		FluidMana fluidBlack = new FluidMana("manablack", TextureHandler.fluidManaBlackStill, TextureHandler.fluidManaBlackFlow);
+		FluidRegistry.registerFluid(fluidBlack);
+		FLUIDMANABLACK = FluidRegistry.getFluid(fluidBlack.getName());
+		BLOCKMANABLACK = new FluidBlockMana(fluidBlack,new MaterialLiquid(MapColor.OBSIDIAN));
+		GameRegistry.register(BLOCKMANABLACK);
+		FLUIDMANABLACK.setBlock(BLOCKMANABLACK);
+		FluidRegistry.addBucketForFluid(fluidBlack);
+		ModItems.BUCKETMANABLACK = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANABLACK);
+
+		FluidMana fluidRed = new FluidMana("manared", TextureHandler.fluidManaRedStill, TextureHandler.fluidManaRedFlow);
+		FluidRegistry.registerFluid(fluidRed);
+		FLUIDMANARED = FluidRegistry.getFluid(fluidRed.getName());
+		BLOCKMANARED = new FluidBlockMana(fluidRed,new MaterialLiquid(MapColor.NETHERRACK));
+		GameRegistry.register(BLOCKMANARED);
+		FLUIDMANARED.setBlock(BLOCKMANARED);
+		FluidRegistry.addBucketForFluid(fluidRed);
+		ModItems.BUCKETMANARED = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANARED);
+
+		FluidMana fluidGreen = new FluidMana("managreen", TextureHandler.fluidManaGreenStill, TextureHandler.fluidManaGreenFlow);
+		FluidRegistry.registerFluid(fluidGreen);
+		FLUIDMANAGREEN = FluidRegistry.getFluid(fluidGreen.getName());
+		BLOCKMANAGREEN = new FluidBlockMana(fluidGreen,new MaterialLiquid(MapColor.GRASS));
 		GameRegistry.register(BLOCKMANAGREEN);
 		FLUIDMANAGREEN.setBlock(BLOCKMANAGREEN);
-		FluidRegistry.addBucketForFluid(fluid);
+		FluidRegistry.addBucketForFluid(fluidGreen);
 		ModItems.BUCKETMANAGREEN = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANAGREEN);
+
+
 	}
 
 	public static void registerTiles() {

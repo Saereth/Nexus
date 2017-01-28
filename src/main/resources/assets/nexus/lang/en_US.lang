@@ -1,3 +1,8 @@
 itemGroup.nexus=Nexus
 item.tablet.name=Tablet
+fluid.manacolourless=Colourless Mana
+fluid.manawhite=White Mana
+fluid.manablue=Blue Mana
+fluid.manablack=Black Mana
+fluid.manared=Red Mana
 fluid.managreen=Green Mana

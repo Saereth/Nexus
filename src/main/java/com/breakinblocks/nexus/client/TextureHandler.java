@@ -15,11 +15,28 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
 
+import java.util.stream.Stream;
+
 public class TextureHandler {
+	public static final ResourceLocation fluidManaColourlessStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manacolourless_still");
+	public static final ResourceLocation fluidManaColourlessFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manacolourless_flow");
+	public static final ResourceLocation fluidManaWhiteStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manawhite_still");
+	public static final ResourceLocation fluidManaWhiteFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manawhite_flow");
+	public static final ResourceLocation fluidManaBlueStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manablue_still");
+	public static final ResourceLocation fluidManaBlueFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manablue_flow");
+	public static final ResourceLocation fluidManaBlackStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manablack_still");
+	public static final ResourceLocation fluidManaBlackFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manablack_flow");
+	public static final ResourceLocation fluidManaRedStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manared_still");
+	public static final ResourceLocation fluidManaRedFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manared_flow");
 	public static final ResourceLocation fluidManaGreenStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/managreen_still");
 	public static final ResourceLocation fluidManaGreenFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/managreen_flow");
 
 	public static void registerFluidRenderers() {
+		registerFluidRenderer(ModBlocks.FLUIDMANACOLOURLESS);
+		registerFluidRenderer(ModBlocks.FLUIDMANAWHITE);
+		registerFluidRenderer(ModBlocks.FLUIDMANABLUE);
+		registerFluidRenderer(ModBlocks.FLUIDMANABLACK);
+		registerFluidRenderer(ModBlocks.FLUIDMANARED);
 		registerFluidRenderer(ModBlocks.FLUIDMANAGREEN);
 	}
 

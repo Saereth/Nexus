@@ -10,6 +10,11 @@ import java.util.ArrayList;
 
 public class ModItems {
 	public static Item TABLET;
+	public static ItemStack BUCKETMANACOLOURLESS;
+	public static ItemStack BUCKETMANAWHITE;
+	public static ItemStack BUCKETMANABLUE;
+	public static ItemStack BUCKETMANABLACK;
+	public static ItemStack BUCKETMANARED;
 	public static ItemStack BUCKETMANAGREEN;
 
 	public static ArrayList<Item> itemBuffer = new ArrayList<>();

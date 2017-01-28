@@ -1,6 +1,26 @@
 {
   "forge_marker": 1,
   "variants": {
+    "manacolourless": {
+      "model": "forge:fluid",
+      "custom": {"fluid": "manacolourless" }
+    },
+    "manawhite": {
+      "model": "forge:fluid",
+      "custom": {"fluid": "manawhite" }
+    },
+    "manablue": {
+      "model": "forge:fluid",
+      "custom": {"fluid": "manablue" }
+    },
+    "manablack": {
+      "model": "forge:fluid",
+      "custom": {"fluid": "manablack" }
+    },
+    "manared": {
+      "model": "forge:fluid",
+      "custom": {"fluid": "manared" }
+    },
     "managreen": {
       "model": "forge:fluid",
       "custom": { "fluid": "managreen" }
