@@ -1,5 +1,6 @@
 package com.breakinblocks.nexus.common.blocks;
 
+
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.ResourceLocation;
@@ -10,10 +11,14 @@ public class FluidMana extends Fluid {
 		super(fluidName, still, flowing);
 		setUnlocalizedName(fluidName);
 		setRarity(EnumRarity.RARE);
-		setLuminosity(15);
-		setDensity(1000);
-		setViscosity(300);
-		setTemperature(100);
+		setLuminosity(6);
+		setDensity(650);
+		setViscosity(450);
+		setTemperature(200);
+		
 		setFillSound(SoundEvents.ITEM_BUCKET_FILL);
 	}
+	
+	
+	
 }
