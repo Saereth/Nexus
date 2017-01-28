@@ -10,12 +10,12 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
+		TextureHandler.registerFluidRenderers();
 	}
 
 	@Override
 	public void init(FMLInitializationEvent event) {
 		super.init(event);
-		TextureHandler.registerFluidRenderers();
 		ModItems.itemBuffer.forEach(e -> tryHandleItemModel(e,e.getRegistryName().getResourcePath()));
 	}
 

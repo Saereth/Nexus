@@ -1,9 +1,9 @@
 {
   "forge_marker": 1,
   "variants": {
-    "nexus.managreen": {
+    "managreen": {
       "model": "forge:fluid",
-      "custom": { "fluid": "nexus.managreen" }
+      "custom": { "fluid": "managreen" }
     }
   }
 }

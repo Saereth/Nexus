@@ -16,8 +16,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
 
 public class TextureHandler {
-	public static final ResourceLocation fluidManaGreenStill = new ResourceLocation(Nexus.MODID + ":managreen_still");
-	public static final ResourceLocation fluidManaGreenFlow = new ResourceLocation(Nexus.MODID + ":managreen_flow");
+	public static final ResourceLocation fluidManaGreenStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/managreen_still");
+	public static final ResourceLocation fluidManaGreenFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/managreen_flow");
 
 	public static void registerFluidRenderers() {
 		registerFluidRenderer(ModBlocks.FLUIDMANAGREEN);
@@ -54,6 +54,8 @@ public class TextureHandler {
 		public FluidCustomModelMapper(Fluid fluid) {
 			System.out.println(fluid);
 			System.out.println(fluid.getName());
+			for (int i=0;i<10;i++)
+				System.out.println();
 			this.resource = new ModelResourceLocation(Nexus.MODID + ":fluids", fluid.getName());
 		}
 
