@@ -1,11 +1,16 @@
 package com.breakinblocks.nexus.common;
 
+import java.io.File;
+
+import com.breakinblocks.nexus.Nexus;
+import com.breakinblocks.nexus.common.handlers.EventHandler;
 import com.breakinblocks.nexus.common.registry.ModBlocks;
 import com.breakinblocks.nexus.common.registry.ModItems;
 import com.breakinblocks.nexus.common.world.NexusWorldGenerator;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -16,13 +21,14 @@ public class CommonProxy {
 	public static NexusWorldGenerator worldGenerator = new NexusWorldGenerator();
 
 	public void preInit(FMLPreInitializationEvent event) {
+		MinecraftForge.EVENT_BUS.register(new EventHandler());
+		Config.init(new File(event.getModConfigurationDirectory(), Nexus.MODID + ".cfg"));
 		ModBlocks.init();
 		ModItems.init();
 	}
 
 	public void init(FMLInitializationEvent event) {
 		GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 10);
-		System.out.println("Generator Called");
 	}
 
 	public void postInit(FMLPostInitializationEvent event) {
