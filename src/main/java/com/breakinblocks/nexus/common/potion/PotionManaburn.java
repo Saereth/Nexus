@@ -31,7 +31,6 @@ public class PotionManaburn extends Potion {
 
 	public PotionManaburn() {
 		super(true, 0xFFFFFF);
-		this.setIconIndex(0, 0);
 	}
 
 	@Override
@@ -69,4 +68,30 @@ public class PotionManaburn extends Potion {
         tes.draw();
         
     }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderHUDEffect(int x, int y, PotionEffect effect, Minecraft mc, float alpha) {
+        Tessellator tes = Tessellator.getInstance();
+        double wh = 18;
+        double offsetX = 3;
+        double offsetY = 3;
+        Color c = new Color(getLiquidColor());
+        float r =   ((float) c.getRed())   / 255F;
+        float g = ((float) c.getGreen()) / 255F;
+        float b =  ((float) c.getBlue())  / 255F;
+
+        mc.renderEngine.bindTexture(rl);
+        VertexBuffer vb = tes.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+        vb.pos(x + offsetX,      y + offsetY,      0).tex(0, 0).color(r, g, b, alpha).endVertex();
+        vb.pos(x + offsetX,      y + offsetY + wh, 0).tex(0, 1).color(r, g, b, alpha).endVertex();
+        vb.pos(x + offsetX + wh, y + offsetY + wh, 0).tex(1, 1).color(r, g, b, alpha).endVertex();
+        vb.pos(x + offsetX + wh, y + offsetY,      0).tex(1, 0).color(r, g, b, alpha).endVertex();
+
+        tes.draw();
+        
+    }
+    
 }
