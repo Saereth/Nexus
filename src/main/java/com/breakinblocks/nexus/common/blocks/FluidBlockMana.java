@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.breakinblocks.nexus.common.registry.ModBlocks;
+import com.breakinblocks.nexus.common.registry.ModPotions;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -70,7 +71,9 @@ public class FluidBlockMana extends BlockFluidClassic {
 
         if (!(entityIn instanceof EntityLivingBase))
         	return;
-        System.out.println("Check collision properties of: " + this.getFluid().getUnlocalizedName());        
+		PotionEffect burn = ((EntityLivingBase) entityIn).getActivePotionEffect(ModPotions.MANABURN);
+ 		((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(ModPotions.MANABURN, burn == null ? 200 : burn.getDuration() + 2, 0, true, false));
+        
         switch (this.getFluid().getUnlocalizedName()) {
         case "fluid.manawhite":
             ((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.HEALTH_BOOST, 200, 1, true, true));
