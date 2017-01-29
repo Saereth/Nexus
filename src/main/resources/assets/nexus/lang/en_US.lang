@@ -6,3 +6,9 @@ fluid.manablue=Blue Mana
 fluid.manablack=Black Mana
 fluid.manared=Red Mana
 fluid.managreen=Green Mana
+
+tile.floodgate.name=Floodgate
+
+potion.manaburn.name=Manaburn
+
+death.attack.nexus.absolute=%1$s felt the burn.
