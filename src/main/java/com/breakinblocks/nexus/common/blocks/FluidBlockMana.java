@@ -3,12 +3,16 @@ package com.breakinblocks.nexus.common.blocks;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
+import com.breakinblocks.nexus.common.registry.ModBlocks;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -25,7 +29,7 @@ public class FluidBlockMana extends BlockFluidClassic {
 		setDefaultState(this.blockState.getBaseState().withProperty(LEVEL,0));
 		setUnlocalizedName(fluid.getName());
 		setRegistryName(fluid.getName());
-		this.slipperiness = 1.2F;
+		this.slipperiness = .2F;
 	}
 	
     @Override
@@ -101,8 +105,79 @@ public class FluidBlockMana extends BlockFluidClassic {
 
         }
         
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    {
+    		switch (this.getFluid().getUnlocalizedName()) {
+    		case "fluid.manared":
+    			checkBlockInteraction(worldIn, pos, Blocks.OBSIDIAN, Blocks.FLOWING_LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.OBSIDIAN, Blocks.LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.NETHERRACK, Blocks.FLOWING_WATER);
+    			checkBlockInteraction(worldIn, pos, Blocks.NETHERRACK, Blocks.WATER);
+    		break;
+    		case "fluid.managreen":
+    			checkBlockInteraction(worldIn, pos, Blocks.DIRT, Blocks.FLOWING_LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.DIRT, Blocks.LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.MOSSY_COBBLESTONE, Blocks.FLOWING_WATER);
+    			checkBlockInteraction(worldIn, pos, Blocks.MOSSY_COBBLESTONE, Blocks.FLOWING_WATER);
+    			break;
+    		case "fluid.manawhite":
+    			checkBlockInteraction(worldIn, pos, Blocks.GLASS, Blocks.FLOWING_LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.GLASS, Blocks.LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.SAND, Blocks.FLOWING_WATER);
+    			checkBlockInteraction(worldIn, pos, Blocks.SAND, Blocks.FLOWING_WATER);
+    			checkFluidExplode(worldIn, pos, ModBlocks.BLOCKMANABLACK);
+    			break;
+    		case "fluid.manablack":
+    			checkBlockInteraction(worldIn, pos, Blocks.SOUL_SAND, Blocks.FLOWING_LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.SOUL_SAND, Blocks.LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.FLOWING_WATER);
+    			checkBlockInteraction(worldIn, pos, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.FLOWING_WATER);
+    			break;
+    		case "fluid.manablue":
+    			checkBlockInteraction(worldIn, pos, Blocks.CLAY, Blocks.FLOWING_LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.CLAY, Blocks.LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.LEAVES, Blocks.FLOWING_WATER);
+    			checkBlockInteraction(worldIn, pos, Blocks.LEAVES, Blocks.FLOWING_WATER);
+    			break;
+    		case "fluid.manacolourless":
+    			checkBlockInteraction(worldIn, pos, Blocks.END_STONE, Blocks.FLOWING_LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.END_STONE, Blocks.LAVA);
+    			checkBlockInteraction(worldIn, pos, Blocks.STONE, Blocks.FLOWING_WATER);
+    			checkBlockInteraction(worldIn, pos, Blocks.STONE, Blocks.FLOWING_WATER);
+    			break;
+    		default:	
+    		break;
+    		}
+    	
+    	super.updateTick(worldIn, pos, state, rand);
+    }
     
-        
+    void checkBlockInteraction(World world, BlockPos pos, Block target, Block fluid){
+    	
+    	if (world.getBlockState(pos.north()).getBlock() == fluid
+    			|| world.getBlockState(pos.south()).getBlock() == fluid
+    			|| world.getBlockState(pos.east()).getBlock() == fluid
+    			|| world.getBlockState(pos.west()).getBlock() == fluid
+    			|| world.getBlockState(pos.down()).getBlock() == fluid)				
+    				world.setBlockState(pos, target.getDefaultState());
+		
+	return;
+    }
+    void checkFluidExplode(World world, BlockPos pos, Block fluid){
+    
+    	
+		if (world.getBlockState(pos.north()).getBlock() == fluid
+		|| world.getBlockState(pos.south()).getBlock() == fluid
+		|| world.getBlockState(pos.east()).getBlock() == fluid
+		|| world.getBlockState(pos.west()).getBlock() == fluid
+		|| world.getBlockState(pos.down()).getBlock() == fluid)				
+			world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 5F, true);
+		
+		
+	return;
+    }
+    
     }
     
 
