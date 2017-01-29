@@ -22,7 +22,7 @@ public class PotionManaburn extends Potion {
 	public static final int HARMAFTER=1200;
 	@SideOnly(Side.CLIENT)
 	static final ResourceLocation rl = new ResourceLocation(Nexus.MODID,"textures/misc/potions.png");
-	DamageSource burnDamage = new DamageSource("%1$s was immoliated in a blaze of mana.").setDamageIsAbsolute().setDamageBypassesArmor();
+	DamageSource burnDamage = new DamageSource("nexus.manaburn").setDamageIsAbsolute().setDamageBypassesArmor();
 	
 	@Override
 	public boolean hasStatusIcon() {

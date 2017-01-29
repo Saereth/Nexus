@@ -11,4 +11,4 @@ tile.floodgate.name=Floodgate
 
 potion.manaburn.name=Manaburn
 
-death.attack.nexus.absolute=%1$s felt the burn.
+death.attack.nexus.manaburn=%1$s was immolated in a blaze of Mana.
