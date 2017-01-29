@@ -6,6 +6,7 @@ import com.breakinblocks.nexus.Nexus;
 import com.breakinblocks.nexus.common.handlers.EventHandler;
 import com.breakinblocks.nexus.common.registry.ModBlocks;
 import com.breakinblocks.nexus.common.registry.ModItems;
+import com.breakinblocks.nexus.common.registry.ModPotions;
 import com.breakinblocks.nexus.common.world.NexusWorldGenerator;
 
 import net.minecraft.block.Block;
@@ -25,6 +26,7 @@ public class CommonProxy {
 		Config.init(new File(event.getModConfigurationDirectory(), Nexus.MODID + ".cfg"));
 		ModBlocks.init();
 		ModItems.init();
+		ModPotions.init();
 	}
 
 	public void init(FMLInitializationEvent event) {
