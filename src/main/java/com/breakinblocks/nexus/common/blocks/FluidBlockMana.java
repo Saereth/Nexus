@@ -30,7 +30,7 @@ public class FluidBlockMana extends BlockFluidClassic {
 		setDefaultState(this.blockState.getBaseState().withProperty(LEVEL,0));
 		setUnlocalizedName(fluid.getName());
 		setRegistryName(fluid.getName());
-		this.slipperiness = .2F;
+		
 	}
 	
     @Override

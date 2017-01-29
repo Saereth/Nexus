@@ -4,43 +4,43 @@ import com.breakinblocks.nexus.Nexus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PotionManaburn extends Potion {
-	public static final int HARMAFTER=3600;
-
+	public static final int HARMAFTER=1200;
+	static final ResourceLocation rl = new ResourceLocation(Nexus.MODID,"textures/misc/potions.png");
+	DamageSource burnDamage = new DamageSource("%1$s was immoliated in a blaze of mana.").setDamageIsAbsolute().setDamageBypassesArmor();
+	
 	@Override
 	public boolean hasStatusIcon() {
-		return super.hasStatusIcon();
+		return true;
 	}
-
-	public static final DamageSource burn = new DamageSource(Nexus.MODID+".manaburn").setDamageAllowedInCreativeMode().setDamageBypassesArmor().setDamageIsAbsolute();
 
 	public PotionManaburn() {
 		super(true, 0xFFFFFF);
+		this.setIconIndex(0, 0);
 	}
 
 	@Override
 	public boolean isReady(int duration, int amplifier) {
 		return duration >= HARMAFTER;
 	}
+	
 
 	@Override
 	public void performEffect(EntityLivingBase entityLivingBaseIn, int amplifier) {
-		System.out.println("boi");
-		entityLivingBaseIn.attackEntityFrom(DamageSource.outOfWorld,2);
+		entityLivingBaseIn.attackEntityFrom(burnDamage,2);
 	}
 
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getStatusIconIndex() {
-		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Nexus.MODID, "textures/misc/potions.png"));
-		return 0;
+		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
+		return super.getStatusIconIndex();
 	}
 
 }
