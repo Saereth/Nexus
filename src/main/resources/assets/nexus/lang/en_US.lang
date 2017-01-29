@@ -6,3 +6,5 @@ fluid.manablue=Blue Mana
 fluid.manablack=Black Mana
 fluid.manared=Red Mana
 fluid.managreen=Green Mana
+
+tile.floodgate.name=Floodgate

@@ -34,12 +34,5 @@ public class CommonProxy {
 	public void postInit(FMLPostInitializationEvent event) {
 
 	}
-
-	public void tryHandleItemModel(Item item, String name) {
-	}
-
-	public void tryHandleBlockModel(Block block, String name) {
-	}
-
 }
 	

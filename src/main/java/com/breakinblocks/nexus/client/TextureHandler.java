@@ -5,8 +5,11 @@ import com.breakinblocks.nexus.common.registry.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockModelRenderer;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
@@ -15,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
 
+import java.util.ArrayList;
 
 
 public class TextureHandler {
@@ -30,6 +34,9 @@ public class TextureHandler {
 	public static final ResourceLocation fluidManaRedFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/manared_flow");
 	public static final ResourceLocation fluidManaGreenStill = new ResourceLocation(Nexus.MODID + ":blocks/fluid/managreen_still");
 	public static final ResourceLocation fluidManaGreenFlow = new ResourceLocation(Nexus.MODID + ":blocks/fluid/managreen_flow");
+
+	public static ArrayList<Item> itemBuffer = new ArrayList<>();
+	public static ArrayList<Block> blockBuffer = new ArrayList<>();
 
 	public static void registerFluidRenderers() {
 		registerFluidRenderer(ModBlocks.FLUIDMANACOLOURLESS);
@@ -59,9 +66,17 @@ public class TextureHandler {
 		mesher.register(item, meta, new ModelResourceLocation(Nexus.MODID + ":" + name, "inventory"));
 	}
 
+	public static void registerBlock(Block block, int meta, String name) {
+		registerItem(Item.getItemFromBlock(block),meta,name);
+	}
+
 	public static void handle(Item item, String name) {
 		registerItem(item, 0, name);
 		//TODO: Handle sub items n stuff
+	}
+
+	public static void handle(Block block, String name) {
+		registerBlock(block,0,name);
 	}
 
 

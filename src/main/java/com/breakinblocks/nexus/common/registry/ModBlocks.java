@@ -1,17 +1,23 @@
 package com.breakinblocks.nexus.common.registry;
 
 import com.breakinblocks.nexus.Nexus;
+import com.breakinblocks.nexus.common.blocks.BlockFloodgate;
 import com.breakinblocks.nexus.common.blocks.FluidBlockMana;
 import com.breakinblocks.nexus.common.blocks.FluidMana;
 import com.breakinblocks.nexus.client.TextureHandler;
+import com.breakinblocks.nexus.common.tiles.TileFloodgate;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.ArrayList;
 
 public class ModBlocks {
 	public static Fluid FLUIDMANACOLOURLESS;
@@ -27,6 +33,9 @@ public class ModBlocks {
 	public static Fluid FLUIDMANAGREEN;
 	public static FluidBlockMana BLOCKMANAGREEN;
 
+	public static Block FLOODGATE;
+
+
 	public static void init() {
 		registerBlocks();
 		registerFluids();
@@ -34,7 +43,7 @@ public class ModBlocks {
 	}
 
 	public static void registerBlocks() {
-
+		FLOODGATE = register(new BlockFloodgate(),"floodgate");
 	}
 
 	public static void registerFluids() {
@@ -46,7 +55,6 @@ public class ModBlocks {
 		FLUIDMANACOLOURLESS.setBlock(BLOCKMANACOLOURLESS);
 		FluidRegistry.addBucketForFluid(fluidColourless);
 		ModItems.BUCKETMANACOLOURLESS = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANACOLOURLESS);
-
 
 		FluidMana fluidWhite = new FluidMana("manawhite", TextureHandler.fluidManaWhiteStill, TextureHandler.fluidManaWhiteFlow);
 		FluidRegistry.registerFluid(fluidWhite);
@@ -97,16 +105,24 @@ public class ModBlocks {
 	}
 
 	public static void registerTiles() {
-
+		GameRegistry.registerTileEntity(TileFloodgate.class,"floodgate");
 	}
 
 	public static <T extends Block>T register(T block, String name) {
 		if (block.getRegistryName() == null)
 			block.setRegistryName(name);
+		ItemBlock item = new ItemBlock(block) {
+			@Override
+			public int getMetadata(int damage) {
+				return damage;
+			}
+		};
+		item.setRegistryName(name);
 		block.setUnlocalizedName(name);
 		block.setCreativeTab(Nexus.tab);
 		GameRegistry.register(block);
-		Nexus.proxy.tryHandleBlockModel(block,name);
+		GameRegistry.register(item);
+		TextureHandler.blockBuffer.add(block);
 		return block;
 	}
 }
