@@ -3,7 +3,6 @@ package com.breakinblocks.nexus;
 import com.breakinblocks.nexus.common.CommonProxy;
 import com.breakinblocks.nexus.common.registry.ModItems;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;

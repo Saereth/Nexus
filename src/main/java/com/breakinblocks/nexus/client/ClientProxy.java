@@ -1,10 +1,6 @@
 package com.breakinblocks.nexus.client;
 
 import com.breakinblocks.nexus.common.CommonProxy;
-import com.breakinblocks.nexus.common.registry.ModBlocks;
-import com.breakinblocks.nexus.common.registry.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
