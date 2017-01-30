@@ -23,7 +23,7 @@ public class ConfigGui extends GuiConfig
 	{
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
 
-		list.add(new ConfigElement(Config.getConfig().getCategory("EnumMana Values".toLowerCase())));
+		list.add(new ConfigElement(Config.getConfig().getCategory("Mana Values".toLowerCase())));
 
 		return list;
 	}
