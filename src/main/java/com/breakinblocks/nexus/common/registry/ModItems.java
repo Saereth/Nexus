@@ -21,6 +21,13 @@ public class ModItems {
 
 	public static void init() {
 		TABLET = register(new ItemTablet(),"tablet");
+
+		BUCKETMANACOLOURLESS.getItem().setCreativeTab(Nexus.tab);
+		BUCKETMANAWHITE .getItem().setCreativeTab(Nexus.tab);
+		BUCKETMANABLUE .getItem().setCreativeTab(Nexus.tab);
+		BUCKETMANABLACK .getItem().setCreativeTab(Nexus.tab);
+		BUCKETMANARED .getItem().setCreativeTab(Nexus.tab);
+		BUCKETMANAGREEN.getItem().setCreativeTab(Nexus.tab);
 	}
 	public static Item register(Item item, String name) {
 		if (item.getRegistryName() == null)

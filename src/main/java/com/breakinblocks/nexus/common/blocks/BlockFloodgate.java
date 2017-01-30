@@ -1,12 +1,23 @@
 package com.breakinblocks.nexus.common.blocks;
 
+import com.breakinblocks.nexus.common.tiles.TileEnderReservoir;
 import com.breakinblocks.nexus.common.tiles.TileFloodgate;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
 
 public class BlockFloodgate extends Block implements ITileEntityProvider {
 	public BlockFloodgate() {
@@ -17,6 +28,37 @@ public class BlockFloodgate extends Block implements ITileEntityProvider {
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
 	}
+
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		System.out.println("boi");
+		FluidStack in;
+		TileEntity tile;
+		if (!worldIn.isRemote &&
+				(tile = worldIn.getTileEntity(pos)) != null &&
+				tile instanceof TileFloodgate &&
+				heldItem != null &&
+				(in = getFluidFromStack(heldItem)) != null) {
+			((TileFloodgate) tile).fill(in, true);
+			heldItem.setItem(Items.BUCKET);
+		}
+		return true;
+	}
+
+	public FluidStack getFluidFromStack(ItemStack in) {
+		if (in == null) {
+			return null;
+		} else {
+			NBTTagCompound tagCompound = in.getTagCompound();
+			if (tagCompound != null && tagCompound.hasKey("FluidName")) {
+				return FluidStack.loadFluidStackFromNBT(tagCompound);
+			} else {
+				return null;
+			}
+		}
+	}
+
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
