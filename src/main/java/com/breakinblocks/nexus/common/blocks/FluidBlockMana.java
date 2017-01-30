@@ -4,13 +4,18 @@ import com.breakinblocks.nexus.common.registry.ModBlocks;
 import com.breakinblocks.nexus.common.registry.ModPotions;
 import com.breakinblocks.nexus.common.util.EnumMana;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
@@ -25,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class FluidBlockMana extends BlockFluidClassic {
 	public FluidBlockMana(Fluid fluid, Material material) {
@@ -121,32 +127,40 @@ public class FluidBlockMana extends BlockFluidClassic {
 				checkBlockInteraction(worldIn, pos, Blocks.GRASS, Blocks.FLOWING_LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.GRASS, Blocks.LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.MOSSY_COBBLESTONE, Blocks.FLOWING_WATER);
-				checkBlockInteraction(worldIn, pos, Blocks.MOSSY_COBBLESTONE, Blocks.FLOWING_WATER);
+				checkBlockInteraction(worldIn, pos, Blocks.MOSSY_COBBLESTONE, Blocks.WATER);
+				checkSpecialCase(worldIn, pos, Blocks.WHEAT, face ->
+						ItemDye.applyBonemeal(new ItemStack(Items.DYE, EnumDyeColor.WHITE.getDyeDamage()), worldIn, pos.offset(face))
+				); // Needs tweaking, currently only supports wheat and only on a block update
 				break;
 			case WHITE:
 				checkBlockInteraction(worldIn, pos, Blocks.GRAVEL, Blocks.FLOWING_LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.GRAVEL, Blocks.LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.SAND, Blocks.FLOWING_WATER);
-				checkBlockInteraction(worldIn, pos, Blocks.SAND, Blocks.FLOWING_WATER);
-				checkFluidExplode(worldIn, pos, ModBlocks.BLOCKMANABLACK);
+				checkBlockInteraction(worldIn, pos, Blocks.SAND, Blocks.WATER);
+				checkSpecialCase(worldIn, pos, ModBlocks.BLOCKMANABLACK, face ->
+						worldIn.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 5F, true)
+				);
 				break;
 			case BLACK:
 				checkBlockInteraction(worldIn, pos, Blocks.SOUL_SAND, Blocks.FLOWING_LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.SOUL_SAND, Blocks.LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.FLOWING_WATER);
-				checkBlockInteraction(worldIn, pos, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.FLOWING_WATER);
+				checkBlockInteraction(worldIn, pos, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.WATER);
 				break;
 			case BLUE:
 				checkBlockInteraction(worldIn, pos, Blocks.HARDENED_CLAY, Blocks.FLOWING_LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.HARDENED_CLAY, Blocks.LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.LEAVES, Blocks.FLOWING_WATER);
-				checkBlockInteraction(worldIn, pos, Blocks.LEAVES, Blocks.FLOWING_WATER);
+				checkBlockInteraction(worldIn, pos, Blocks.LEAVES, Blocks.WATER);
+				checkSpecialCase(worldIn, pos, Blocks.CAULDRON, face ->
+						worldIn.setBlockState(pos.offset(face), worldIn.getBlockState(pos.offset(face)).withProperty(BlockCauldron.LEVEL, 3), 2)
+				);
 				break;
 			case COLOURLESS:
 				checkBlockInteraction(worldIn, pos, Blocks.END_STONE, Blocks.FLOWING_LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.END_STONE, Blocks.LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.STONE, Blocks.FLOWING_WATER);
-				checkBlockInteraction(worldIn, pos, Blocks.STONE, Blocks.FLOWING_WATER);
+				checkBlockInteraction(worldIn, pos, Blocks.STONE, Blocks.WATER);
 				break;
 			default:
 				break;
@@ -168,10 +182,10 @@ public class FluidBlockMana extends BlockFluidClassic {
 		return;
 	}
 
-	void checkFluidExplode(World world, BlockPos pos, Block fluid) {
+	void checkSpecialCase(World world, BlockPos pos, Block fluid, Consumer<EnumFacing> exec) {
 		for (EnumFacing offset : EnumFacing.VALUES) {
 			if (world.getBlockState(pos.offset(offset)).getBlock() == fluid) {
-				world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 5F, true);
+				exec.accept(offset);
 				return;
 			}
 		}
