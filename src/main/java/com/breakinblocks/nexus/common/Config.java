@@ -24,7 +24,7 @@ public class Config {
 	public static void syncConfig() {
 		String category;
 
-		category = "Mana Values";
+		category = "EnumMana Values";
 		config.addCustomCategoryComment(category,"Various mana values");
 		config.setCategoryRequiresMcRestart(category,false);
 		manapooldensity=config.get(category,"manapooldensity",100,"Value as percentage").getInt();
