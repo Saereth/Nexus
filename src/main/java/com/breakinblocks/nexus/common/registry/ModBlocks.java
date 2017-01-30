@@ -1,10 +1,12 @@
 package com.breakinblocks.nexus.common.registry;
 
 import com.breakinblocks.nexus.Nexus;
+import com.breakinblocks.nexus.common.blocks.BlockEnderReservoir;
 import com.breakinblocks.nexus.common.blocks.BlockFloodgate;
 import com.breakinblocks.nexus.common.blocks.FluidBlockMana;
 import com.breakinblocks.nexus.common.blocks.FluidMana;
 import com.breakinblocks.nexus.client.TextureHandler;
+import com.breakinblocks.nexus.common.tiles.TileEnderReservoir;
 import com.breakinblocks.nexus.common.tiles.TileFloodgate;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -33,6 +35,7 @@ public class ModBlocks {
 
 	public static Block FLOODGATE;
 
+	public static Block ENDERRESERVOIR;
 
 	public static void init() {
 		registerBlocks();
@@ -42,6 +45,7 @@ public class ModBlocks {
 
 	public static void registerBlocks() {
 		FLOODGATE = register(new BlockFloodgate(),"floodgate");
+		ENDERRESERVOIR = register(new BlockEnderReservoir(), "enderreservoir");
 	}
 
 	public static void registerFluids() {
@@ -104,6 +108,7 @@ public class ModBlocks {
 
 	public static void registerTiles() {
 		GameRegistry.registerTileEntity(TileFloodgate.class,"floodgate");
+		GameRegistry.registerTileEntity(TileEnderReservoir.class, "enderreservoir");
 	}
 
 	public static <T extends Block>T register(T block, String name) {
