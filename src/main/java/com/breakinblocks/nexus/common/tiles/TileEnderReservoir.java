@@ -121,7 +121,6 @@ public class TileEnderReservoir extends TileBase implements ITickable
 		return dropStack;
 	}
 
-
 	public void syncWithAll()
 	{
 		if (!world.isRemote)

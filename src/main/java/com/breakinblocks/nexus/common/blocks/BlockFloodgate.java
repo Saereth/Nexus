@@ -1,6 +1,5 @@
 package com.breakinblocks.nexus.common.blocks;
 
-import com.breakinblocks.nexus.common.tiles.TileEnderReservoir;
 import com.breakinblocks.nexus.common.tiles.TileFloodgate;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -30,6 +29,7 @@ public class BlockFloodgate extends Block implements ITileEntityProvider {
 	}
 
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		System.out.println("boi");

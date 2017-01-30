@@ -2,8 +2,8 @@ package com.breakinblocks.nexus.common.blocks;
 
 import java.util.List;
 
-
 import com.breakinblocks.nexus.common.tiles.TileEnderReservoir;
+import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -11,14 +11,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
-
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -85,37 +85,37 @@ public class BlockEnderReservoir extends Block implements ITileEntityProvider {
 		}
 
 	}
-	
-	  @Override
-	  public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-	    return false;
-	    
-	  }  
 
-
-	
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) 
-	{
-		TileEntity te = world.getTileEntity(pos);
-		if(te instanceof TileEnderReservoir)
-		{
-			if (((TileEnderReservoir) te).tank.getFluid() != null)
-			{
-				float x = world.rand.nextFloat() * 0.8F + 0.1F;
-				float y = world.rand.nextFloat() * 0.8F + 0.1F;
-				float z = world.rand.nextFloat() * 0.8F + 0.1F;
-						
-				ItemStack itemNBT = ((TileEnderReservoir) te).getDropWithNBT();
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		return false;
 
-				EntityItem entityitem = new EntityItem(world,
-						pos.getX() + x, pos.getY() + y, pos.getZ() + z,	itemNBT);
-				world.spawnEntity(entityitem);
-			}
-			else 
-			{
-				super.breakBlock(world, pos, state);
+	}
+
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		return Lists.newArrayList();
+	}
+
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te != null && !worldIn.isRemote && !player.isCreative() && te instanceof TileEnderReservoir) {
+			TileEnderReservoir Er = (TileEnderReservoir) te;
+			if (Er.tank.getFluid() != null) {
+				ItemStack itemNBT = Er.getDropWithNBT();
+				EntityItem entityitem = new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemNBT);
+				worldIn.spawnEntity(entityitem);
+			} else {
+				Item itemDrop = Item.getItemFromBlock(this);
+				ItemStack stackDrop = new ItemStack(itemDrop);
+				EntityItem entityitem = new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), stackDrop);
+				worldIn.spawnEntity(entityitem);
+
 			}
 		}
+
+		super.onBlockHarvested(worldIn, pos, state, player);
 	}
+
 }
