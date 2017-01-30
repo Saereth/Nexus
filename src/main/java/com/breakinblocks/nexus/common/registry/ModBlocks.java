@@ -5,6 +5,7 @@ import com.breakinblocks.nexus.common.blocks.BlockEnderReservoir;
 import com.breakinblocks.nexus.common.blocks.BlockFloodgate;
 import com.breakinblocks.nexus.common.blocks.FluidBlockMana;
 import com.breakinblocks.nexus.common.blocks.FluidMana;
+import com.breakinblocks.nexus.common.items.ItemBlockEnderReservoir;
 import com.breakinblocks.nexus.client.TextureHandler;
 import com.breakinblocks.nexus.common.tiles.TileEnderReservoir;
 import com.breakinblocks.nexus.common.tiles.TileFloodgate;
@@ -17,6 +18,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import java.lang.reflect.InvocationTargetException;
 
 
 public class ModBlocks {
@@ -43,9 +45,11 @@ public class ModBlocks {
 		registerTiles();
 	}
 
+	
+	
 	public static void registerBlocks() {
 		FLOODGATE = register(new BlockFloodgate(),"floodgate");
-		ENDERRESERVOIR = register(new BlockEnderReservoir(), "enderreservoir");
+		ENDERRESERVOIR = register(new BlockEnderReservoir(), ItemBlockEnderReservoir.class, "enderreservoir");
 	}
 
 	public static void registerFluids() {
@@ -103,6 +107,7 @@ public class ModBlocks {
 		FluidRegistry.addBucketForFluid(fluidGreen);
 		ModItems.BUCKETMANAGREEN = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FLUIDMANAGREEN);
 
+		
 
 	}
 
@@ -128,4 +133,32 @@ public class ModBlocks {
 		TextureHandler.blockBuffer.add(block);
 		return block;
 	}
+	
+	public static <T extends Block>T register(T block, Class<? extends ItemBlock> itemclass, String name) {
+		if (block.getRegistryName() == null)
+			block.setRegistryName(name);
+
+		try
+		{
+			ItemBlock itemBlock = itemclass.getConstructor(Block.class).newInstance(block);
+			itemBlock.setRegistryName(name);
+			GameRegistry.register(itemBlock);
+		} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e)
+		{
+			e.printStackTrace();
+		}
+		
+		block.setUnlocalizedName(name);
+		block.setCreativeTab(Nexus.tab);
+		GameRegistry.register(block);
+		TextureHandler.blockBuffer.add(block);
+		
+		return block;
+	}
+	
+	public static void registerBlock(Block block, Class<? extends ItemBlock> itemclass, String name)
+	{
+	}
+	
+	
 }

@@ -1,6 +1,8 @@
 package com.breakinblocks.nexus.common.tiles;
 
 
+import java.util.Random;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -9,6 +11,7 @@ import com.breakinblocks.nexus.common.network.NetworkController;
 import com.breakinblocks.nexus.common.registry.ModBlocks;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,6 +37,7 @@ public class TileEnderReservoir extends TileBase implements ITickable
 {
 	public int capacity = Integer.MAX_VALUE;
 	public FluidTank tank = new FluidTank(capacity);
+	private Random rand = new Random();
 	
 
 	@Override
@@ -145,7 +149,6 @@ public class TileEnderReservoir extends TileBase implements ITickable
 	}
 	
 	
-	
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
     	System.out.println("Block activated!");
     	if(worldIn.isRemote) {
@@ -211,6 +214,7 @@ public class TileEnderReservoir extends TileBase implements ITickable
                     return false;
                 } else {
                     copy = heldItem.copy();
+                    copy.stackSize = 1;
                     container = FluidUtil.getFluidHandler(copy);
                     if(container != null) {
                         handler.fill(container.drain(fill, true), true);
@@ -221,9 +225,17 @@ public class TileEnderReservoir extends TileBase implements ITickable
                         	playerIn.setHeldItem(hand, copy);
                         } else if(ItemHandlerHelper.canItemStacksStack(copy, heldItem)) {
                         	++heldItem.stackSize;
+                        	System.out.println("Stacked");
                         	playerIn.setHeldItem(hand, heldItem);
                         } else {
-                        	playerIn.inventory.addItemStackToInventory(copy);
+                        	heldItem.stackSize--;
+                        	System.out.println("Not Stacked");
+                        	if (heldItem.stackSize <= 0)
+                        		playerIn.setHeldItem(hand, copy);
+                        	else if (!playerIn.inventory.addItemStackToInventory(copy)){
+                        		EntityItem fluidItem = new EntityItem(world, pos.getX(), pos.getY()-rand.nextInt(2), pos.getZ(), copy);
+                        		playerIn.getEntityWorld().spawnEntity(fluidItem);
+                        	}
                         }
                     }
 
@@ -250,6 +262,7 @@ public class TileEnderReservoir extends TileBase implements ITickable
                     return false;
                 } else {
                     copy = heldItem.copy();
+                    copy.stackSize = 1;
                     container = FluidUtil.getFluidHandler(copy);
                     if(container != null) {
                         container.fill(handler.drain(fill, true), true);
@@ -259,10 +272,16 @@ public class TileEnderReservoir extends TileBase implements ITickable
                         if(this.isEmpty(heldItem)) {
                             playerIn.setHeldItem(hand, copy);
                         } else if(ItemHandlerHelper.canItemStacksStack(copy, heldItem)) {
-                            ++heldItem.stackSize;
-                            playerIn.setHeldItem(hand, heldItem);
-                        } else {
+                            heldItem.stackSize--;
                             playerIn.inventory.addItemStackToInventory(copy);
+                        } else {
+                        	heldItem.stackSize--;
+                        	if (heldItem.stackSize <= 0)
+                        		playerIn.setHeldItem(hand, copy);
+                            	else if (!playerIn.inventory.addItemStackToInventory(copy)){
+                            		EntityItem fluidItem = new EntityItem(world, pos.getX(), pos.getY()-rand.nextInt(2), pos.getZ(), copy);
+                            		playerIn.getEntityWorld().spawnEntity(fluidItem);
+                            	}
                         }
                     }
 
