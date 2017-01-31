@@ -17,11 +17,18 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class TileFloodgate extends TileBase implements IFluidHandler, ITickable {
 	private static final EnumFacing[] offsets = new EnumFacing[5];
-	private static final int MAX_DEPTH = 32;
+	private static final int DEPTH_MAX = 8;
+	private static final int DEPTH_BASE = 3;
+	private static final double DEPTH_WAIT = 128.0;
+	private static final int DEPTH_COOLDOWN = (int) (DEPTH_WAIT * Math.pow(2, DEPTH_MAX))-1;
+	private static final double LOGTWO = Math.log10(2);
+	private static long lastcheck = 0;
 	@CapabilityInject(IFluidHandler.class)
 	static Capability<IFluidHandler> FLUIDCAPABILITY = null;
 
@@ -32,72 +39,58 @@ public class TileFloodgate extends TileBase implements IFluidHandler, ITickable 
 
 	}
 
-	private TreeMap<Integer, Deque<BlockPos>> queue = new TreeMap<>();
-	private Set<BlockPos> visited = new HashSet<BlockPos>();
-	private FluidTank buffer = new FluidTank(Fluid.BUCKET_VOLUME * 10);
+	private TreeSet<BlockPos> queue = new TreeSet<>();
+	private Set<BlockPos> visited = new HashSet<>();
+	private FluidTank buffer = new FluidTank(Fluid.BUCKET_VOLUME * 2);
 	private int cooldown = 0;
 
 	@Override
 	public void update() {
-		if (world.isRemote)
+		if (world.isRemote || buffer.getFluid() == null || buffer.drain(Fluid.BUCKET_VOLUME, false) == null || buffer.drain(Fluid.BUCKET_VOLUME, false).amount != Fluid.BUCKET_VOLUME)
 			return;
-		FluidStack drained;
-		if ((drained = drain(Fluid.BUCKET_VOLUME, false)) == null || drained.amount < Fluid.BUCKET_VOLUME)
-			return;
+
+		rebuildQueue(Math.log10(((cooldown++ % DEPTH_COOLDOWN) + 1)/DEPTH_WAIT)  / LOGTWO);
 
 		BlockPos newpos;
-		if ((newpos = getNextSpot()) != null ) {
+		if ((newpos = queue.pollFirst()) != null) {
 			IBlockState state = world.getBlockState(newpos);
-			if (state != null && state.getBlock() != null) {
-				Block block = state.getBlock();
-				if (block == Blocks.AIR || ((block instanceof IFluidBlock || block instanceof BlockStaticLiquid) && state.getValue(BlockStaticLiquid.LEVEL) != 0)) {
-					world.setBlockState(newpos, buffer.getFluid().getFluid().getBlock().getDefaultState());
-					drain(Fluid.BUCKET_VOLUME, true);
-
-				}
+			Block block = state.getBlock();
+			if (block == Blocks.AIR || ((block instanceof IFluidBlock || block instanceof BlockStaticLiquid) && state.getValue(BlockStaticLiquid.LEVEL) != 0)) {
+				world.setBlockState(newpos, buffer.getFluid().getFluid().getBlock().getDefaultState());
+				//				drain(Fluid.BUCKET_VOLUME, true);
 			}
-		} else {
-			rebuildQueue();
 		}
 		super.update();
 	}
 
-	private BlockPos getNextSpot() {
-		if (queue.isEmpty() || queue.firstEntry().getValue() == null)
-			return null;
-		return queue.firstEntry().getValue().pollFirst();
-	}
-
-	private void rebuildQueue() {
+	private void rebuildQueue(double depth) {
+		if (depth % 1 != 0 || depth < 0)
+			return;
+		System.out.println("Waited " + (System.currentTimeMillis()/1000l-lastcheck));
+		lastcheck = System.currentTimeMillis()/1000l;
 		queue.clear();
 		visited.clear();
-		queueAdjacent(this.pos,0);
-	}
-
-	private Deque<BlockPos> getLayer(int layer) {
-		Deque<BlockPos> get = queue.get(layer);
-		if (get == null) {
-			get = new LinkedList<>();
-			queue.put(layer, get);
-		}
-		return get;
+		queueAdjacent(this.pos, (int) Math.pow(DEPTH_BASE,depth));
 	}
 
 	private void queueAdjacent(BlockPos pos, int depth) {
-		if (depth > MAX_DEPTH)
+		if (depth <= 0)
 			return;
+
+		visited.add(pos);
 		for (EnumFacing face : offsets) {
 			BlockPos newpos = pos.offset(face);
 			if (!visited.contains(newpos)) {
-				visited.add(newpos);
 				Block block = world.getBlockState(newpos).getBlock();
 				if (block == Blocks.AIR || block instanceof IFluidBlock || block instanceof BlockStaticLiquid) {
-					getLayer(newpos.getY()).add(newpos);
-					queueAdjacent(newpos, depth+1);
+					if (block == Blocks.AIR || (block instanceof IFluidBlock || block instanceof BlockStaticLiquid) && world.getBlockState(newpos).getValue(BlockStaticLiquid.LEVEL) != 0)
+						queue.add(newpos);
+					queueAdjacent(newpos, depth - 1);
 				}
 			}
 		}
 	}
+
 
 	@Nullable
 	@Override
