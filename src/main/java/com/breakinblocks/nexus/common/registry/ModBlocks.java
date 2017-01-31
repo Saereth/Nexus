@@ -9,6 +9,7 @@ import com.breakinblocks.nexus.common.items.ItemBlockEnderReservoir;
 import com.breakinblocks.nexus.client.TextureHandler;
 import com.breakinblocks.nexus.common.tiles.TileEnderReservoir;
 import com.breakinblocks.nexus.common.tiles.TileFloodgate;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
@@ -18,6 +19,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.lang.reflect.InvocationTargetException;
 
 
@@ -35,10 +39,11 @@ public class ModBlocks {
 	public static Fluid FLUIDMANAGREEN;
 	public static FluidBlockMana BLOCKMANAGREEN;
 
-	public static Block FLOODGATE;
+	public static BlockFloodgate FLOODGATE;
 
-	public static Block ENDERRESERVOIR;
-
+		
+	public static BlockEnderReservoir ENDERRESERVOIR;
+	
 	public static void init() {
 		registerBlocks();
 		registerFluids();
@@ -47,11 +52,18 @@ public class ModBlocks {
 
 	
 	
+	
 	public static void registerBlocks() {
+		
 		FLOODGATE = register(new BlockFloodgate(),"floodgate");
 		ENDERRESERVOIR = register(new BlockEnderReservoir(), ItemBlockEnderReservoir.class, "enderreservoir");
 	}
 
+    @SideOnly(Side.CLIENT)
+    public static void initModels() {
+    }
+
+    
 	public static void registerFluids() {
 		FluidMana fluidColourless = new FluidMana("manacolourless", TextureHandler.fluidManaColourlessStill, TextureHandler.fluidManaColourlessFlow);
 		FluidRegistry.registerFluid(fluidColourless);
