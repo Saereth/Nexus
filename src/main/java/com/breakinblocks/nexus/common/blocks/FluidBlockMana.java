@@ -152,6 +152,7 @@ public class FluidBlockMana extends BlockFluidClassic {
 				checkBlockInteraction(worldIn, pos, Blocks.HARDENED_CLAY, Blocks.LAVA);
 				checkBlockInteraction(worldIn, pos, Blocks.LEAVES, Blocks.FLOWING_WATER);
 				checkBlockInteraction(worldIn, pos, Blocks.LEAVES, Blocks.WATER);
+				checkBlockInteractionReplace(worldIn, pos, Blocks.CLAY, Blocks.SAND);
 				checkSpecialCase(worldIn, pos, Blocks.CAULDRON, face ->
 						worldIn.setBlockState(pos.offset(face), worldIn.getBlockState(pos.offset(face)).withProperty(BlockCauldron.LEVEL, 3), 2)
 				);
@@ -176,6 +177,19 @@ public class FluidBlockMana extends BlockFluidClassic {
 					world.setBlockState(pos, Blocks.LEAVES.getDefaultState().withProperty(BlockLeaves.DECAYABLE, false));
 				else
 					world.setBlockState(pos, target.getDefaultState());
+				return;
+			}
+		}
+		return;
+	}
+
+	void checkBlockInteractionReplace(World world, BlockPos pos, Block target, Block fluid) {
+		for (EnumFacing offset : EnumFacing.VALUES) {
+			if (world.getBlockState(pos.offset(offset)).getBlock() == fluid) {
+				if (target == Blocks.LEAVES)
+					world.setBlockState(pos.offset(offset), Blocks.LEAVES.getDefaultState().withProperty(BlockLeaves.DECAYABLE, false));
+				else
+					world.setBlockState(pos.offset(offset), target.getDefaultState());
 				return;
 			}
 		}
