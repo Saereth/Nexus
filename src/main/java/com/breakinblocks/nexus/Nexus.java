@@ -3,7 +3,7 @@ package com.breakinblocks.nexus;
 import com.breakinblocks.nexus.common.CommonProxy;
 import com.breakinblocks.nexus.common.registry.ModItems;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -19,8 +19,8 @@ public class Nexus {
 	public static final String DEPENDENCIES = "";
 	public static CreativeTabs tab = new CreativeTabs(MODID) {
 		@Override
-		public Item getTabIconItem() {
-			return ModItems.TABLET;
+		public ItemStack getTabIconItem() {
+			return new ItemStack(ModItems.TABLET);
 		}
 	};
 
