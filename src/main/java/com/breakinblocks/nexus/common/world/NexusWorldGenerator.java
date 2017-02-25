@@ -1,6 +1,8 @@
 package com.breakinblocks.nexus.common.world;
 
 import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -166,7 +168,7 @@ public class NexusWorldGenerator implements IWorldGenerator {
 
 	private boolean biomeIsValid(World world, BlockPos pos) {
 		Biome biome = world.getBiome(pos);
-		Type[] types = BiomeDictionary.getTypesForBiome(biome);
+		Set<Type> types = BiomeDictionary.getTypes(biome);
 
 		for (Type type : types) {
 			if (type == Type.END || type == Type.MUSHROOM || type == Type.NETHER || type == Type.WASTELAND) {
@@ -180,7 +182,7 @@ public class NexusWorldGenerator implements IWorldGenerator {
 	private boolean biomeIsValidforColor(World world, BlockPos pos, int color) {
 
 		Biome biome = world.getBiome(pos);
-		Type[] types = BiomeDictionary.getTypesForBiome(biome);
+		Set<Type> types = BiomeDictionary.getTypes(biome);
 
 		switch (color) {
 		case 1:// White

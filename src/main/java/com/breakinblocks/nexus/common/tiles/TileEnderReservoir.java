@@ -3,7 +3,6 @@ package com.breakinblocks.nexus.common.tiles;
 
 import java.util.Random;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.breakinblocks.nexus.common.network.CustomInfoPacket;
@@ -193,13 +192,10 @@ public class TileEnderReservoir extends TileBase implements ITickable
         }
     }
     
-    public boolean isEmpty(@Nonnull ItemStack stack) {
-        return stack.stackSize == 0;
-    }
-    
+   
     public boolean attemptFill(EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, IFluidHandler handler) {
         ItemStack copy = heldItem.copy();
-        copy.stackSize = 1;
+        copy.setCount(1);
         IFluidHandler container = FluidUtil.getFluidHandler(copy);
         if(container == null) {
             return false;
@@ -213,23 +209,23 @@ public class TileEnderReservoir extends TileBase implements ITickable
                     return false;
                 } else {
                     copy = heldItem.copy();
-                    copy.stackSize = 1;
+                    copy.setCount(1);
                     container = FluidUtil.getFluidHandler(copy);
                     if(container != null) {
                         handler.fill(container.drain(fill, true), true);
                     }
 
-                    if(copy.stackSize != 0) {
-                        if(this.isEmpty(heldItem)) {
+                    if(copy.getCount() != 0) {
+                        if(heldItem.isEmpty()) {
                         	playerIn.setHeldItem(hand, copy);
                         } else if(ItemHandlerHelper.canItemStacksStack(copy, heldItem)) {
-                        	++heldItem.stackSize;
+                        	heldItem.setCount(heldItem.getCount()+1);
                         	System.out.println("Stacked");
                         	playerIn.setHeldItem(hand, heldItem);
                         } else {
-                        	heldItem.stackSize--;
+                        	heldItem.setCount(heldItem.getCount()-1);
                         	System.out.println("Not Stacked");
-                        	if (heldItem.stackSize <= 0)
+                        	if (heldItem.getCount() <= 0)
                         		playerIn.setHeldItem(hand, copy);
                         	else if (!playerIn.inventory.addItemStackToInventory(copy)){
                         		EntityItem fluidItem = new EntityItem(world, pos.getX(), pos.getY()-rand.nextInt(2), pos.getZ(), copy);
@@ -247,7 +243,7 @@ public class TileEnderReservoir extends TileBase implements ITickable
     
     public boolean attemptDrain(EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, IFluidHandler handler) {
         ItemStack copy = heldItem.copy();
-        copy.stackSize = 1;
+        copy.setCount(1);
         IFluidHandler container = FluidUtil.getFluidHandler(copy);
         if(container == null) {
             return false;
@@ -261,21 +257,21 @@ public class TileEnderReservoir extends TileBase implements ITickable
                     return false;
                 } else {
                     copy = heldItem.copy();
-                    copy.stackSize = 1;
+                    copy.setCount(1);
                     container = FluidUtil.getFluidHandler(copy);
                     if(container != null) {
                         container.fill(handler.drain(fill, true), true);
                     }
 
-                    if(copy.stackSize != 0) {
-                        if(this.isEmpty(heldItem)) {
+                    if(copy.getCount() != 0) {
+                        if(heldItem.isEmpty()) {
                             playerIn.setHeldItem(hand, copy);
                         } else if(ItemHandlerHelper.canItemStacksStack(copy, heldItem)) {
-                            heldItem.stackSize--;
+                            heldItem.setCount(heldItem.getCount()-1);
                             playerIn.inventory.addItemStackToInventory(copy);
                         } else {
-                        	heldItem.stackSize--;
-                        	if (heldItem.stackSize <= 0)
+                        	heldItem.setCount(heldItem.getCount()-1);;
+                        	if (heldItem.getCount() <= 0)
                         		playerIn.setHeldItem(hand, copy);
                             	else if (!playerIn.inventory.addItemStackToInventory(copy)){
                             		EntityItem fluidItem = new EntityItem(world, pos.getX(), pos.getY()-rand.nextInt(2), pos.getZ(), copy);

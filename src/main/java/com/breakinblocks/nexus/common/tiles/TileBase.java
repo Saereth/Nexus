@@ -2,6 +2,7 @@ package com.breakinblocks.nexus.common.tiles;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
@@ -27,8 +28,13 @@ public class TileBase extends TileEntity {
         markDirty();
     }
 
+	@Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+        this.readFromNBT(packet.getNbtCompound());
+    }
+    
 	public void update() {
-		// TODO Auto-generated method stuff	
+		
 	}
 
 }

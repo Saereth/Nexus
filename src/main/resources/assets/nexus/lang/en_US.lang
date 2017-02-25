@@ -9,6 +9,8 @@ fluid.managreen=Green Mana
 
 tile.floodgate.name=Floodgate
 tile.enderreservoir.name=Ender Reservoir
+tile.manafont.name=Mana Font
+
 
 potion.manaburn.name=Manaburn
 

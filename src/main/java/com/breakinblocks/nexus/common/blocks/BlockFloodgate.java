@@ -17,8 +17,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-
 public class BlockFloodgate extends Block implements ITileEntityProvider {
 	public BlockFloodgate() {
 		super(Material.PISTON);
@@ -30,17 +28,19 @@ public class BlockFloodgate extends Block implements ITileEntityProvider {
 	}
 
 
-	@SuppressWarnings("deprecation")
+	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		FluidStack in;
 		TileEntity tile;
+		
 		if ((tile = worldIn.getTileEntity(pos)) != null && tile instanceof TileFloodgate)
 		playerIn.sendMessage(new TextComponentString("Fluid: " + ((TileFloodgate) tile).serialize()));
-		if (!worldIn.isRemote && (tile = worldIn.getTileEntity(pos)) != null && tile instanceof TileFloodgate && heldItem != null && (in = getFluidFromStack(heldItem)) != null) {
+		if (!worldIn.isRemote && (tile = worldIn.getTileEntity(pos)) != null && tile instanceof TileFloodgate && playerIn.getHeldItem(hand) != null && (in = getFluidFromStack(playerIn.getHeldItem(hand))) != null) {
 			((TileFloodgate) tile).fill(in, true);
 			if (!playerIn.isCreative())
-				heldItem.setItem(Items.BUCKET);
+				playerIn.setHeldItem(hand, new ItemStack(Items.BUCKET));
+				
 		}
 		return true;
 	}
