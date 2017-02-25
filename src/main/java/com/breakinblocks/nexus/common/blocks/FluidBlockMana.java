@@ -33,24 +33,11 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class FluidBlockMana extends BlockFluidClassic {
-	private static Vec3i[] offsets = new Vec3i[10];
-	static {
-		offsets[0] = new Vec3i(-1,0,-1);
-		offsets[1] = new Vec3i(-1,0,1);
-		offsets[2] = new Vec3i(1,0,1);
-		offsets[3] = new Vec3i(1,0,-1);
-		for (int i=0;i<6;i++) {
-			offsets[i+4] = EnumFacing.VALUES[i].getDirectionVec();
-		}
 
-	}
 	public FluidBlockMana(Fluid fluid, Material material) {
 		super(fluid, material);
 		setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));
@@ -193,14 +180,18 @@ public class FluidBlockMana extends BlockFluidClassic {
 		int next = world.rand.nextInt((int) (1 / Config.fluidmanaconsumechance));
 		System.out.println(next);
 		if (next == 0) {
-			BlockPos newpos = getSourcePos(world, pos);
-//			world.setBlockToAir(newpos);
-			world.setBlockState(newpos,Blocks.BEDROCK.getDefaultState());
-			world.playSound(null, newpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+			BlockPos newpos = getSourcePos(world, pos, null);
+			if (newpos != null) {
+				world.setBlockToAir(newpos);
+//				world.setBlockState(newpos,Blocks.BEDROCK.getDefaultState());
+				world.playSound(null, newpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+			}
 		}
 	}
 
-	BlockPos getSourcePos(World world, BlockPos pos) {
+	BlockPos getSourcePos(World world, BlockPos pos, HashSet<BlockPos> visited) {
+		if (visited == null)
+			visited = new HashSet<>();
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof IFluidBlock || block instanceof BlockStaticLiquid) {
@@ -208,18 +199,19 @@ public class FluidBlockMana extends BlockFluidClassic {
 			if (ourLevel == 0) {
 				return pos;
 			}
-			for (Vec3i offset : offsets) {
-				state = world.getBlockState(pos.add(offset));
-				block = state.getBlock();
-				if (block instanceof IFluidBlock || block instanceof BlockStaticLiquid) {
-					int level = state.getValue(BlockStaticLiquid.LEVEL);
-					if (level == 0 || level < ourLevel) {
-						return getSourcePos(world, pos.add(offset));
+			for (EnumFacing offset : EnumFacing.VALUES) {
+				if (visited.add(pos.offset(offset))) {
+					state = world.getBlockState(pos.offset(offset));
+					block = state.getBlock();
+					if (block == this && (block instanceof IFluidBlock || block instanceof BlockStaticLiquid)) {
+						BlockPos rtn = getSourcePos(world, pos.offset(offset),visited);
+						if (rtn != null)
+							return rtn;
 					}
 				}
 			}
 		}
-		return pos;
+		return null;
 	}
 
 	void checkBlockInteraction(World world, BlockPos pos, Block target, Block fluid) {
