@@ -1,11 +1,13 @@
 package com.breakinblocks.nexus.common.blocks;
 
+import com.breakinblocks.nexus.common.Config;
 import com.breakinblocks.nexus.common.registry.ModBlocks;
 import com.breakinblocks.nexus.common.registry.ModPotions;
 import com.breakinblocks.nexus.common.util.EnumMana;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -13,18 +15,23 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,6 +40,17 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public class FluidBlockMana extends BlockFluidClassic {
+	private static Vec3i[] offsets = new Vec3i[10];
+	static {
+		offsets[0] = new Vec3i(-1,0,-1);
+		offsets[1] = new Vec3i(-1,0,1);
+		offsets[2] = new Vec3i(1,0,1);
+		offsets[3] = new Vec3i(1,0,-1);
+		for (int i=0;i<6;i++) {
+			offsets[i+4] = EnumFacing.VALUES[i].getDirectionVec();
+		}
+
+	}
 	public FluidBlockMana(Fluid fluid, Material material) {
 		super(fluid, material);
 		setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));
@@ -116,6 +134,7 @@ public class FluidBlockMana extends BlockFluidClassic {
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(worldIn, pos, state, rand);
 		switch (EnumMana.getFromFluid(this.getFluid())) {
 			case RED:
 				checkBlockInteraction(worldIn, pos, Blocks.OBSIDIAN, Blocks.FLOWING_LAVA);
@@ -167,17 +186,51 @@ public class FluidBlockMana extends BlockFluidClassic {
 				break;
 		}
 
-		super.updateTick(worldIn, pos, state, rand);
+
+	}
+
+	void checkBlockEvaporate(World world, BlockPos pos) {
+		int next = world.rand.nextInt((int) (1 / Config.fluidmanaconsumechance));
+		System.out.println(next);
+		if (next == 0) {
+			BlockPos newpos = getSourcePos(world, pos);
+//			world.setBlockToAir(newpos);
+			world.setBlockState(newpos,Blocks.BEDROCK.getDefaultState());
+			world.playSound(null, newpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+		}
+	}
+
+	BlockPos getSourcePos(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		if (block instanceof IFluidBlock || block instanceof BlockStaticLiquid) {
+			int ourLevel = state.getValue(BlockStaticLiquid.LEVEL);
+			if (ourLevel == 0) {
+				return pos;
+			}
+			for (Vec3i offset : offsets) {
+				state = world.getBlockState(pos.add(offset));
+				block = state.getBlock();
+				if (block instanceof IFluidBlock || block instanceof BlockStaticLiquid) {
+					int level = state.getValue(BlockStaticLiquid.LEVEL);
+					if (level == 0 || level < ourLevel) {
+						return getSourcePos(world, pos.add(offset));
+					}
+				}
+			}
+		}
+		return pos;
 	}
 
 	void checkBlockInteraction(World world, BlockPos pos, Block target, Block fluid) {
 		for (EnumFacing offset : EnumFacing.VALUES) {
 			if (world.getBlockState(pos.offset(offset)).getBlock() == fluid) {
-				if (target == Blocks.LEAVES)
+				checkBlockEvaporate(world, pos);
+				if (target == Blocks.LEAVES) {
 					world.setBlockState(pos, Blocks.LEAVES.getDefaultState().withProperty(BlockLeaves.DECAYABLE, false));
-				else
+				} else {
 					world.setBlockState(pos, target.getDefaultState());
-				return;
+				}
 			}
 		}
 		return;
@@ -186,11 +239,12 @@ public class FluidBlockMana extends BlockFluidClassic {
 	void checkBlockInteractionReplace(World world, BlockPos pos, Block target, Block fluid) {
 		for (EnumFacing offset : EnumFacing.VALUES) {
 			if (world.getBlockState(pos.offset(offset)).getBlock() == fluid) {
-				if (target == Blocks.LEAVES)
+				checkBlockEvaporate(world, pos);
+				if (target == Blocks.LEAVES) {
 					world.setBlockState(pos.offset(offset), Blocks.LEAVES.getDefaultState().withProperty(BlockLeaves.DECAYABLE, false));
-				else
+				} else {
 					world.setBlockState(pos.offset(offset), target.getDefaultState());
-				return;
+				}
 			}
 		}
 		return;
@@ -199,8 +253,8 @@ public class FluidBlockMana extends BlockFluidClassic {
 	void checkSpecialCase(World world, BlockPos pos, Block fluid, Consumer<EnumFacing> exec) {
 		for (EnumFacing offset : EnumFacing.VALUES) {
 			if (world.getBlockState(pos.offset(offset)).getBlock() == fluid) {
+				checkBlockEvaporate(world, pos);
 				exec.accept(offset);
-				return;
 			}
 		}
 		return;
